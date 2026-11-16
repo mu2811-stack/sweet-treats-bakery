@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- TODO: rename to your shop -->
+  <title>Sweet Treats Bakery</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- ITE 270 · Module 5 · Bakery Motion Lab starter
+       The layout and content are done. Your job is the MOTION.
+       Work through STEP 0 to STEP 10 in the lesson. Each step has a matching
+       "STEP" comment in styles.css or script.js. Press M to open the Motion X-ray. -->
+
+  <nav class="nav" aria-label="Main">
+    <div class="wrap">
+      <a class="logo" href="#top">Sweet Treats Bakery</a>
+      <ul>
+        <li><a href="#menu">Menu</a></li>
+        <li><a href="#story">How we make it</a></li>
+        <li><a href="#visit">Visit</a></li>
+      </ul>
+      <!-- STEP 9: this button pauses every looping animation -->
+      <button class="pill" id="pauseBtn" type="button" aria-pressed="false">Pause motion</button>
+      <button class="cart" id="cart" type="button" aria-label="Your order">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 8h18v12H3zM3 8l3-4h12l3 4" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+        <span class="count" id="count" hidden>0</span>
+      </button>
+    </div>
+  </nav>
+
+  <main id="top">
+    <!-- ===== HERO ===== -->
+    <header class="hero">
+      <div class="wrap">
+        <p class="eyebrow">Sweet Treats Bakery. · Fresh from 7 a.m.</p>
+        <!-- STEP 3: each word is a .w with its own --i number for the stagger -->
+        <h1><span class="w" style="--i:0">Fresh.</span> <span class="w" style="--i:1">Fun.</span> <span class="w" style="--i:2">Baked</span> <span class="w accent" style="--i:3">daily.</span></h1>
+        <p class="lede"><p class="lede">Welcome to Sweet Treats Bakery! We make fresh donuts, cupcakes, cookies, and cakes for families, students, and everyone who loves sweets.</p>
+        <div class="ctas">
+          <a class="btn" href="#menu">See the menu</a>
+          <a class="link" href="#story">How we make it <span aria-hidden="true">→</span></a>
+        </div>
+      </div>
+
+      <!-- STEP 4: animate at least two parts of this illustration.
+           Ready-made hooks: .steam (3 puffs), .awning, .sign, .mascot.
+           Add your own shapes and classes too. -->
+      <svg class="shop" viewBox="0 0 600 380"
+     role="img" aria-labelledby="shopTitle">
+  <title id="shopTitle">Sweet Treats Bakery storefront</title>
+
+  <!-- Yellow bakery building -->
+  <rect x="80" y="115" width="440" height="245"
+        fill="#F5E9A6" stroke="#655747" stroke-width="3"/>
+
+  <!-- Pink rectangular roof -->
+  <rect x="60" y="70" width="480" height="70"
+        fill="#F4A6C1" stroke="#A86A83" stroke-width="3"/>
+
+  <!-- Bakery name -->
+  <rect x="145" y="88" width="310" height="35"
+        fill="#F5E9A6"/>
+
+  <text x="300" y="111" text-anchor="middle"
+        font-size="22" font-weight="bold" fill="#563E45">
+    Sweet Treats Bakery
+  </text>
+
+  <!-- Left blue window -->
+  <!-- Moving heart-shaped cupcake -->
+<rect x="110" y="165" width="130" height="100"
+        fill="#8DD3F2" stroke="#536A7A" stroke-width="3"/>
+  <path d="M175 165 V265 M110 215 H240"
+        stroke="#536A7A" stroke-width="2"/>
+
+  <!-- Right blue window -->
+  <rect x="360" y="165" width="130" height="100"
+        fill="#8DD3F2" stroke="#536A7A" stroke-width="3"/>
+  <path d="M425 165 V265 M360 215 H490"
+        stroke="#536A7A" stroke-width="2"/>
+
+  <!-- Brown door -->
+  <rect x="265" y="265" width="70" height="95"
+        fill="#B77B55" stroke="#79543E" stroke-width="2"/>
+  <circle cx="325" cy="315" r="4" fill="white"/>
+
+  <!-- Swinging OPEN sign -->
+  <g class="open-sign">
+    <line x1="125" y1="140" x2="125" y2="185"
+          stroke="#555" stroke-width="3"/>
+    <rect x="100" y="185" width="110" height="35"
+          fill="#F29B48"/>
+    <text x="155" y="208" text-anchor="middle"
+          font-size="20" fill="#42332C">
+      OPEN
+    </text>
+  </g>
+
+  <!-- Flag pole -->
+  <line x1="490" y1="70" x2="490" y2="20"
+        stroke="#79543E" stroke-width="5"/>
+
+  <!-- Waving pink flag -->
+  <g class="flag">
+    <path d="M490 20 Q520 5 555 25 Q525 45 490 20"
+          fill="#F4A6C1"
+          stroke="#A86A83" stroke-width="3"/>
+  </g>
+</svg>
+    </header>
+
+    <!-- ===== MENU ===== -->
+    
+<section class="band" id="menu" aria-labelledby="menuTitle">
+  <div class="wrap">
+    <h2 id="menuTitle">Our Sweet Treats</h2>
+    <p class="lede">
+      Fresh donuts, cupcakes, cookies, and cakes made
+      with love for families, students, and sweet lovers!
+    </p>
+
+    <div class="grid">
+
+      <!-- Heart Cupcake -->
+      <article class="card reveal" style="--i:0" data-name="Love Heart Cupcake">
+        <div class="art" aria-hidden="true">
+          <svg viewBox="0 0 100 100" width="85" height="85">
+            <path d="M50 25 C25 0 5 30 20 48
+                     L50 72 L80 48 C95 30 75 0 50 25Z"
+                  fill="#ff86b7" stroke="#c44879"
+                  stroke-width="3"/>
+            <path d="M29 62 L71 62 L65 91 L35 91Z"
+                  fill="#88d7ed" stroke="#458ca8"
+                  stroke-width="3"/>
+            <circle cx="42" cy="43" r="3" fill="#573144"/>
+            <circle cx="58" cy="43" r="3" fill="#573144"/>
+            <path d="M43 52 Q50 59 57 52"
+                  fill="none" stroke="#573144"
+                  stroke-width="2"/>
+          </svg>
+        </div>
+        <h3>Love Heart Cupcake</h3>
+        <p>Sweet pink heart-shaped cupcake made with love.</p>
+        <div class="row">
+          <span class="price">$3.75</span>
+          <button class="btn small add" type="button">Add to order</button>
+        </div>
+      </article>
+
+      <!-- Donut -->
+      <article class="card reveal" style="--i:1" data-name="Sprinkle Donut">
+        <div class="art" aria-hidden="true">🍩</div>
+        <h3>Sprinkle Donut</h3>
+        <p>Soft donut with pink glaze and colorful sprinkles.</p>
+        <div class="row">
+          <span class="price">$3.25</span>
+          <button class="btn small add" type="button">Add to order</button>
+        </div>
+      </article>
+
+      <!-- Cookie -->
+      <article class="card reveal" style="--i:2" data-name="Chocolate Chip Cookie">
+        <div class="art" aria-hidden="true">🍪</div>
+        <h3>Chocolate Chip Cookie</h3>
+        <p>Fresh cookie with delicious chocolate chips.</p>
+        <div class="row">
+          <span class="price">$2.50</span>
+          <button class="btn small add" type="button">Add to order</button>
+        </div>
+      </article>
+
+      <!-- Strawberry Cake -->
+      <article class="card reveal" style="--i:3" data-name="Strawberry Cake">
+        <div class="art" aria-hidden="true">🍰</div>
+        <h3>Strawberry Cake</h3>
+        <p>Soft cake with sweet strawberry frosting.</p>
+        <div class="row">
+          <span class="price">$5.00</span>
+          <button class="btn small add" type="button">Add to order</button>
+        </div>
+      </article>
+
+      <!-- Vanilla Cupcake -->
+      <article class="card reveal" style="--i:4" data-name="Vanilla Cupcake">
+        <div class="art" aria-hidden="true">🧁</div>
+        <h3>Vanilla Cupcake</h3>
+        <p>Fluffy vanilla cupcake with creamy frosting.</p>
+        <div class="row">
+          <span class="price">$3.50</span>
+          <button class="btn small add" type="button">Add to order</button>
+        </div>
+      </article>
+
+      <!-- Chocolate Cake -->
+      <article class="card reveal" style="--i:5" data-name="Chocolate Cake">
+        <div class="art" aria-hidden="true">🎂</div>
+        <h3>Chocolate Cake</h3>
+        <p>Rich chocolate cake for special occasions.</p>
+        <div class="row">
+          <span class="price">$5.50</span>
+          <button class="btn small add" type="button">Add to order</button>
+        </div>
+      </article>
+
+    </div>
+  </div>
+</section>
+
+
+    <!-- ===== STEP 6: SCROLL STORY. Choose OPTION A or OPTION B and delete the other. ===== -->
+
+    <!-- OPTION A: pinned picture + steps. An IntersectionObserver sets data-step on #stage. -->
+    <section class="band tint" id="story" aria-labelledby="storyTitle">
+      <div class="wrap">
+        <h2 id="storyTitle">How we make it</h2>
+        <div class="story">
+          <div class="stage" id="stage" data-step="mix" aria-hidden="true">
+            <svg viewBox="0 0 300 240">
+              <path class="bowl" d="M40 150Q150 260 260 150Z" fill="#7fb7d8"/>
+              <ellipse class="dough" cx="150" cy="148" rx="70" ry="30" fill="#f4e3c3"/>
+            </svg>
+            <p class="stage-label" id="stageLabel">Mix</p>
+          </div>
+          <div class="steps">
+            <article class="step" data-step="mix"><h3>1. Mix</h3><p>We mix fresh ingredients to make our sweet dough.</p></article>
+            <article class="step" data-step="shape"><h3>2. Shape</h3><p>We carefully shape the dough into delicious treats</p></article>
+            <article class="step" data-step="rise"><h3>3. Rise</h3><p>We let the dough rise until it becomes soft and fluffy.</p></article>
+            <article class="step" data-step="bake"><h3>4. Bake</h3><p>We bake our treats until they are golden and ready to enjoy</p></article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- OPTION B: product zoom. Scroll progress writes --p (0 to 1) on #zoom. -->
+    <section class="zoom" id="zoom" aria-labelledby="zoomTitle">
+      <div class="zoom-stage">
+        <div class="zoom-art" aria-hidden="true">🥐</div>
+        <h2 id="zoomTitle">Our signature bake</h2>
+        <p class="zoom-text">Replace with what makes it special.</p>
+      </div>
+    </section>
+
+    <!-- ===== VISIT ===== -->
+    <section class="band" id="visit" aria-labelledby="visitTitle">
+      <div class="wrap">
+        <h2 id="visitTitle">Come say hi</h2>
+        <p class="lede">Sweet Treats Bakery is a class project. We welcome families, students, and everyone who loves fresh sweets!</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot"><div class="wrap"><p>Sweet Treats Bakery — Created by Maryam Urooj for ITE-270.</p></div></footer>
+
+  <!-- STEP 7: announce what happened, for screen readers and everyone else -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+  <!-- Motion X-ray: press M. Remove this line before you publish if you like. -->
+  <script src="motion-xray.js"></script>
+</body>
+</html>
