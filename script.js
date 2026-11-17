@@ -1,124 +1,207 @@
-/* ==========================================================================
-   Crumbs & Co. starter  ·  ITE 270 Module 5
-   Rule for this whole file: JavaScript decides WHEN. CSS decides HOW IT LOOKS.
-   Most of your JavaScript should only add or remove a class, set a data
-   attribute, or set a CSS custom property. The exception is STEP 7.
-   ========================================================================== */
 
-const $ = (sel, root = document) => root.querySelector(sel);
-const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
-const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+/* Sweet Treats Bakery — ITE-270 Final */
 
-/* Small helper for STEP 7: shows a message and announces it to screen readers */
+/* STEP 1: Helpers */
+const $ = (selector, root = document) =>
+  root.querySelector(selector);
+
+const $$ = (selector, root = document) =>
+  [...root.querySelectorAll(selector)];
+
+const motionPreference = window.matchMedia(
+  '(prefers-reduced-motion: reduce)'
+);
+
+let reduced = motionPreference.matches;
+let paused = false;
+
+/* STEP 7: Announcement */
 const toast = $('#toast');
 let toastTimer;
+
 function announce(message) {
+  if (!toast) return;
+
   toast.textContent = message;
   toast.classList.add('show');
+
   clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => toast.classList.remove('show'), 2400);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+  }, 2400);
 }
 
-
-/* ---------- STEP 5: reveal on scroll (R4) ----------------------------------
-   1. Make an IntersectionObserver. When an entry isIntersecting, remove
-      'pending' from entry.target and stop observing it.
-   2. Loop over $$('.reveal'). If an element's getBoundingClientRect().top is
-      greater than innerHeight (below the fold), add 'pending' and observe it.
-   3. Skip all of this if `reduced` is true.                                 */
-
-if (!reduced) {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
+/* STEP 5 — R4: Scroll reveal */
+const revealObserver = new IntersectionObserver(
+  (entries, observer) => {
+    entries.forEach(entry => {
       if (entry.isIntersecting) {
         entry.target.classList.remove('pending');
         observer.unobserve(entry.target);
       }
     });
-  });
+  },
+  { threshold: 0.12 }
+);
 
-  $$('.reveal').forEach((element) => {
-    if (element.getBoundingClientRect().top > innerHeight) {
+function setupReveals() {
+  $$('.reveal').forEach(element => {
+    element.classList.remove('pending');
+    revealObserver.unobserve(element);
+
+    if (!reduced &&
+        element.getBoundingClientRect().top >
+        window.innerHeight) {
       element.classList.add('pending');
-      observer.observe(element);
+      revealObserver.observe(element);
     }
   });
 }
 
+setupReveals();
 
-/* ---------- STEP 6, OPTION A: steps that change a sticky picture (R5) ------
-   1. const STORY_MARGIN = '-45% 0px -45% 0px';   (a band in the middle of the screen)
-   2. Observe every .step with { rootMargin: STORY_MARGIN }.
-   3. When one isIntersecting, set $('#stage').dataset.step = entry.target.dataset.step
-      and update #stageLabel's text.
-   4. So you can SEE the band: window.motionXray && motionXray.zone(STORY_MARGIN);  */
+/* STEP 6 — R5: OPTION A
+   Pinned picture changes on scroll */
 
 const STORY_MARGIN = '-45% 0px -45% 0px';
 
-if (!reduced) {
-  const storyObserver = new IntersectionObserver((entries) => {
-    entries.forEach((entry) => {
-      if (entry.isIntersecting) {
-        const stage = $('#stage');
-        const label = $('#stageLabel');
+const stage = $('#stage');
+const stageLabel = $('#stageLabel');
+const storySteps = $$('.step');
 
-        if (stage) {
-          stage.dataset.step = entry.target.dataset.step;
-        }
+function selectStoryStep(step) {
+  if (!stage || !stageLabel || !step) return;
 
-        if (label) {
-          label.textContent = entry.target.dataset.step;
-        }
-      }
-    });
-  }, { rootMargin: STORY_MARGIN });
+  const name = step.dataset.step;
 
-  $$('.step').forEach((step) => {
-    storyObserver.observe(step);
-  });
-
-  if (window.motionXray) {
-    window.motionXray.zone(STORY_MARGIN);
-  }
+  stage.dataset.step = name;
+  stageLabel.textContent =
+    name.charAt(0).toUpperCase() + name.slice(1);
 }
 
+const storyObserver = new IntersectionObserver(
+  entries => {
+    if (reduced) return;
 
-/* ---------- STEP 6, OPTION B: scroll progress for a product zoom (R5) ------
-   On scroll (inside requestAnimationFrame):
-     const r = zoom.getBoundingClientRect();
-     const p = Math.min(1, Math.max(0, -r.top / (r.height - innerHeight)));
-     zoom.style.setProperty('--p', p.toFixed(3));
-   If `reduced`, set --p to 1 and skip the listener.                         */
+    const visible = entries.filter(
+      entry => entry.isIntersecting
+    );
+
+    if (visible.length === 0) return;
+
+    const middle = window.innerHeight / 2;
+
+    visible.sort((a, b) => {
+      const centerA =
+        a.boundingClientRect.top +
+        a.boundingClientRect.height / 2;
+
+      const centerB =
+        b.boundingClientRect.top +
+        b.boundingClientRect.height / 2;
+
+      return Math.abs(centerA - middle) -
+             Math.abs(centerB - middle);
+    });
+
+    selectStoryStep(visible[0].target);
+  },
+  { rootMargin: STORY_MARGIN }
+);
+
+storySteps.forEach(step => {
+  storyObserver.observe(step);
+});
+
+/* Update initial state and handle fast scrolling */
+function syncStory() {
+  if (!storySteps.length || !stage) return;
+
+  if (reduced) {
+    selectStoryStep(storySteps[0]);
+    return;
+  }
+
+  const middle = window.innerHeight / 2;
+  let closest = storySteps[0];
+  let distance = Infinity;
+
+  storySteps.forEach(step => {
+    const rect = step.getBoundingClientRect();
+    const center = rect.top + rect.height / 2;
+    const difference = Math.abs(center - middle);
+
+    if (difference < distance) {
+      distance = difference;
+      closest = step;
+    }
+  });
+
+  selectStoryStep(closest);
+}
+
+let storyFrame = false;
+
+window.addEventListener('scroll', () => {
+  if (storyFrame) return;
+
+  storyFrame = true;
+
+  requestAnimationFrame(() => {
+    syncStory();
+    storyFrame = false;
+  });
+}, { passive: true });
+
+window.addEventListener('resize', syncStory);
+
+syncStory();
+
+/* Motion X-ray: show observation band */
+if (window.motionXray) {
+  window.motionXray.zone(STORY_MARGIN);
+}
+
+/* STEP 7 — R6: Add to Order
+   Two chained animations */
 
 
-
-
-/* ---------- STEP 7: click interaction with element.animate() (R6) ----------
-   For every .add button:
-     1. Update the count and announce(`${name} added. ${count} in your order.`)
-     2. Animate something with element.animate([...keyframes], { duration, easing }).
-        Ideas: fly a copy of the card's .art to #cart; pop the button; wiggle the cart.
-     3. Chain a second animation with .finished.then(() => ...),
-        for example a bounce on #count.
-     4. If `reduced`, skip the travel and just update the count.             */
+/* STEP 7 — Add to Order Animation (R6) */
 
 let count = 0;
+
 $$('.add').forEach((button) => {
   button.addEventListener('click', () => {
     const card = button.closest('.card');
     const name = card?.querySelector('h3')?.textContent || 'Treat';
-
-    count++;
     const counter = $('#count');
+    const cart = $('#cart');
+
+    // Update the order number
+    count++;
 
     if (counter) {
+      counter.hidden = false;
       counter.textContent = count;
     }
 
+    if (cart) {
+      cart.setAttribute(
+        'aria-label',
+        `Your order, ${count} items`
+      );
+    }
+
+    // Announce to screen readers
     announce(`${name} added. ${count} in your order.`);
 
-    if (reduced) return;
+    // Respect reduced motion and pause
+    if (
+      matchMedia('(prefers-reduced-motion: reduce)').matches ||
+      document.documentElement.classList.contains('paused')
+    ) return;
 
+    // First animation: button grows
     const first = button.animate(
       [
         { transform: 'scale(1)' },
@@ -131,8 +214,12 @@ $$('.add').forEach((button) => {
       }
     );
 
+    // Second animation: cart number bounces
     first.finished.then(() => {
-      if (counter) {
+      if (
+        counter &&
+        !document.documentElement.classList.contains('paused')
+      ) {
         counter.animate(
           [
             { transform: 'scale(1)' },
@@ -141,28 +228,36 @@ $$('.add').forEach((button) => {
           ],
           {
             duration: 450,
-            easing: 'ease-in-out'
+            easing: 'cubic-bezier(.34, 1.56, .64, 1)'
           }
         );
       }
-    });
+    }).catch(() => {});
   });
 });
 
 
-/* ---------- STEP 9: pause button (R8) ---------------------------------------
-   Toggle the class 'paused' on document.documentElement, flip aria-pressed,
-   and change the button text between "Pause motion" and "Play motion".     */
-
+/* STEP 9 — R8: Pause Motion */
 const pauseButton = $('#pauseBtn');
-if(pauseButton) {
+
+if (pauseButton) {
   pauseButton.addEventListener('click', () => {
-    const paused = document.documentElement.classList.toggle('paused');
+    paused = !paused;
 
-    pauseButton.setAttribute('aria-pressed', String(paused));
-    pauseButton.textContent = paused ? 'Play motion' : 'Pause motion';
+    document.documentElement.classList.toggle(
+      'paused',
+      paused
+    );
 
-    document.getAnimations().forEach((animation) => {
+    pauseButton.setAttribute(
+      'aria-pressed',
+      String(paused)
+    );
+
+    pauseButton.textContent =
+      paused ? 'Play motion' : 'Pause motion';
+
+    document.getAnimations().forEach(animation => {
       if (paused) {
         animation.pause();
       } else {
@@ -171,3 +266,21 @@ if(pauseButton) {
     });
   });
 }
+
+/* Reduced Motion can change during testing */
+function updateReducedMotion(event) {
+  reduced = event.matches;
+  setupReveals();
+  syncStory();
+
+  if (reduced) {
+    document.getAnimations().forEach(animation => {
+      animation.cancel();
+    });
+  }
+}
+
+motionPreference.addEventListener(
+  'change',
+  updateReducedMotion
+);

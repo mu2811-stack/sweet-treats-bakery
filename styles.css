@@ -1,136 +1,390 @@
-/* ==========================================================================
-   Crumbs & Co. starter  ·  ITE 270 Module 5
-   Part 1 (LAYOUT) is finished: you can restyle it, but you don't need to.
-   Part 2 (MOTION) is yours: work through the STEP blocks in order.
-   ========================================================================== */
 
-/* ---------- STEP 1: motion tokens -------------------------------------------
-   Name your durations and curves once, then use the names everywhere.
-   These defaults work. Tune them to fit your shop's personality.          */
+/* Sweet Treats Bakery — ITE-270 Final Project */
+
+/* STEP 1 — Motion tokens (R7) */
 :root {
-  --fast: 180ms;                                /* presses, small color changes */
-  --med: 450ms;                                 /* hovers, cards, panels */
-  --slow: 900ms;                                /* entrances, big moments */
-  --ease-out: cubic-bezier(.2, .8, .2, 1);      /* things arriving */
-  --ease-in: cubic-bezier(.5, 0, .75, 0);       /* things leaving */
-  --ease-spring: cubic-bezier(.34, 1.56, .64, 1); /* playful overshoot */
+  --fast: 180ms;
+  --med: 450ms;
+  --slow: 780ms;
 
-  /* colors and type */
-  --cream: #fff8ef; --crust: #e4572e; --toast: #9c4a3a; --ink: #2b1d14; --muted: #6d5a4c; --tint: #fdf0e1;
+  --ease-out: cubic-bezier(.2, .8, .2, 1);
+  --ease-in: cubic-bezier(.5, 0, .75, 0);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+
+  --cream: #fff8f2;
+  --crust: #bd4675;
+  --ink: #382735;
+  --muted: #695560;
+  --tint: #fff0f7;
+
   --font: "Trebuchet MS", "Segoe UI", system-ui, sans-serif;
   --display: Georgia, "Times New Roman", serif;
 }
 
-/* ==========================================================================
-   PART 1 · LAYOUT (done)
-   ========================================================================== */
-* { box-sizing: border-box; }
-[hidden] { display: none !important; }
-html { scroll-behavior: smooth; }
-body { margin: 0; font-family: var(--font); color: var(--ink); background: var(--cream); line-height: 1.6; }
-h1, h2, h3 { font-family: var(--display); line-height: 1.1; margin: 0; }
-p { margin: 0; }
-a { color: var(--crust); }
-:focus-visible { outline: 3px solid var(--crust); outline-offset: 3px; border-radius: 6px; }
-.wrap { max-width: 1040px; margin: 0 auto; padding-inline: 20px; }
-
-.nav { position: sticky; top: 0; z-index: 10; background: rgba(255, 248, 239, .85); backdrop-filter: blur(12px); border-bottom: 1px solid #f0dcc4; }
-.nav .wrap { display: flex; align-items: center; gap: 20px; height: 58px; }
-.logo { font-family: var(--display); font-weight: 700; font-size: 1.3rem; color: var(--ink); text-decoration: none; }
-.nav ul { display: flex; gap: 20px; list-style: none; margin: 0 auto; padding: 0; }
-.nav ul a { color: var(--ink); text-decoration: none; }
-.pill { font: inherit; font-size: .85rem; border: 1px solid #e3cdb3; background: #fff; border-radius: 999px; padding: 6px 12px; cursor: pointer; }
-.pill[aria-pressed="true"] { background: var(--ink); color: #fff; }
-.cart { position: relative; width: 40px; height: 40px; border: 0; background: none; color: var(--ink); cursor: pointer; }
-.cart svg { width: 26px; height: 26px; }
-.count { position: absolute; top: 0; right: 0; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: var(--crust); color: #fff; font-size: 11px; font-weight: 700; display: grid; place-items: center; }
-@media (max-width: 640px) { .nav ul { display: none; } .pill { margin-left: auto; } }
-
-.hero { text-align: center; padding-top: 64px; overflow: hidden; }
-.eyebrow { color: var(--crust); font-weight: 700; margin-bottom: 8px; }
-h1 { font-size: clamp(2.6rem, 8vw, 5rem); }
-.accent { color: var(--crust); }
-.lede { font-size: 1.2rem; color: var(--muted); max-width: 40ch; margin: 16px auto 0; }
-.ctas { display: flex; gap: 20px; justify-content: center; align-items: center; flex-wrap: wrap; margin-top: 26px; }
-.btn { font: inherit; font-weight: 700; display: inline-block; border: 0; border-radius: 999px; padding: 12px 22px; background: var(--crust); color: #fff; text-decoration: none; cursor: pointer; }
-.btn.small { padding: 8px 14px; font-size: .9rem; }
-.link { font-weight: 700; text-decoration: none; }
-.shop { display: block; width: min(720px, 100%); height: auto; margin: 36px auto 0; overflow: visible; }
-
-.band { padding-block: 80px; }
-.band.tint { background: var(--tint); }
-.band h2 { font-size: clamp(2rem, 5vw, 3rem); text-align: center; }
-.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 20px; margin-top: 40px; }
-.card { background: #fff; border-radius: 20px; padding: 22px; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 2px 10px rgba(80, 40, 10, .06); }
-.card .art { font-size: 3.5rem; text-align: center; }
-.card .row { display: flex; justify-content: space-between; align-items: center; margin-top: auto; padding-top: 10px; }
-.price { font-weight: 700; }
-
-.story { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 40px; }
-.stage { position: sticky; top: 90px; height: 360px; border-radius: 24px; background: #fff; display: grid; place-items: center; }
-.stage svg { width: 80%; height: auto; }
-.stage-label { position: absolute; top: 14px; left: 18px; font-weight: 700; }
-.step { min-height: 70vh; display: flex; flex-direction: column; justify-content: center; gap: 8px; }
-.step h3 { font-size: 1.8rem; }
-@media (max-width: 720px) { .story { grid-template-columns: 1fr; } .stage { top: 64px; height: 40vh; z-index: 2; } }
-
-.zoom { --p: 0; height: 240vh; background: #2b1d14; color: #fff8ef; }
-.zoom-stage { position: sticky; top: 0; height: 100vh; display: grid; place-content: center; justify-items: center; gap: 14px; text-align: center; padding-inline: 20px; }
-.zoom-art { font-size: 9rem; line-height: 1; }
-
-.foot { padding: 30px 0; color: var(--muted); font-size: .9rem; }
-.toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); background: var(--ink); color: #fff; padding: 10px 18px; border-radius: 999px; opacity: 0; pointer-events: none; }
-.toast.show { opacity: 1; }
-
-/* ==========================================================================
-   PART 2 · MOTION (yours)
-   Write a motion sentence in MOTION-LOG.md for every animation you add.
-   ========================================================================== */
-
-/* ---------- STEP 2: hover, focus and press feedback (R1) --------------------
-   1. Put a transition on the BASE rule of .btn and .card (not on :hover).
-   2. Lift on :hover AND :focus-visible (cards: use .card:focus-within).
-   3. Press down on :active.
-   Animate transform (and box-shadow on cards if you like). Never "transition: all". */
-
-.btn { transition: transform var(--fast) ease, background var(--fast) ease; }
-.btn:hover, .btn:focus-visible { transform: translateY(-2px); }
-.btn:active { transform: scale(.97); }
-.card {
- transition: transform var(--med) var(--ease-out);
+/* BASE LAYOUT */
+* {
+  box-sizing: border-box;
 }
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font: 16px/1.6 var(--font);
+}
+
+h1, h2, h3 {
+  font-family: var(--display);
+  line-height: 1.15;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--crust);
+}
+
+:focus-visible {
+  outline: 3px solid #9a3470;
+  outline-offset: 3px;
+  border-radius: 5px;
+}
+
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding-inline: 20px;
+}
+
+/* NAVIGATION */
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: rgba(255, 248, 242, .95);
+  border-bottom: 1px solid #ead2db;
+}
+
+.nav .wrap {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  min-height: 64px;
+}
+
+.logo {
+  font: 700 1.3rem var(--display);
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.nav ul {
+  display: flex;
+  list-style: none;
+  gap: 20px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.nav ul a {
+  text-decoration: none;
+  color: var(--ink);
+}
+
+.pill {
+  font: inherit;
+  font-size: .85rem;
+  border: 1px solid #d9b8c5;
+  background: white;
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.pill[aria-pressed="true"] {
+  background: var(--ink);
+  color: white;
+}
+
+.cart {
+  position: relative;
+  width: 42px;
+  height: 42px;
+  border: 0;
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+}
+
+.cart svg {
+  width: 26px;
+  height: 26px;
+}
+
+.count {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  min-width: 19px;
+  height: 19px;
+  padding-inline: 4px;
+  border-radius: 10px;
+  background: var(--crust);
+  color: white;
+  display: grid;
+  place-items: center;
+  font: 700 11px var(--font);
+}
+
+/* HERO */
+.hero {
+  text-align: center;
+  padding-top: 56px;
+  overflow: hidden;
+}
+
+.eyebrow {
+  color: var(--crust);
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+h1 {
+  font-size: clamp(2.6rem, 8vw, 5rem);
+}
+
+.accent {
+  color: var(--crust);
+}
+
+.lede {
+  font-size: 1.15rem;
+  color: var(--muted);
+  max-width: 46ch;
+  margin: 16px auto 0;
+}
+
+.ctas {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-top: 26px;
+}
+
+.btn {
+  display: inline-block;
+  font: 700 1rem var(--font);
+  padding: 12px 22px;
+  border: 0;
+  border-radius: 999px;
+  text-decoration: none;
+  cursor: pointer;
+  background: var(--crust);
+  color: white;
+}
+
+.btn.small {
+  font-size: .9rem;
+  padding: 8px 14px;
+}
+
+.link {
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.shop {
+  display: block;
+  width: min(720px, 100%);
+  height: auto;
+  margin: 36px auto 0;
+  overflow: visible;
+}
+
+/* MENU */
+.band {
+  padding-block: 80px;
+}
+
+.band.tint {
+  background: var(--tint);
+}
+
+.band h2 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  text-align: center;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns:
+    repeat(auto-fill, minmax(230px, 1fr));
+  gap: 20px;
+  margin-top: 36px;
+}
+
+.card {
+  background: white;
+  padding: 22px;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  box-shadow: 0 2px 10px #50301412;
+}
+
+.card .art {
+  font-size: 3.5rem;
+  text-align: center;
+  min-height: 95px;
+  display: grid;
+  place-items: center;
+}
+
+.card .row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 12px;
+  margin-top: auto;
+  gap: 8px;
+}
+
+.price {
+  font-weight: 700;
+}
+
+/* SCROLL STORY LAYOUT */
+.story {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+  margin-top: 40px;
+  align-items: start;
+}
+
+.stage {
+  position: sticky;
+  top: 90px;
+  height: 360px;
+  border-radius: 24px;
+  background: white;
+  display: grid;
+  place-items: center;
+}
+
+.stage svg {
+  width: 80%;
+  height: auto;
+  overflow: visible;
+}
+
+.stage-label {
+  position: absolute;
+  top: 14px;
+  left: 18px;
+  font-weight: 700;
+  text-transform: capitalize;
+}
+
+.step {
+  min-height: 70vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 8px;
+}
+
+.step h3 {
+  font-size: 1.8rem;
+}
+
+.foot {
+  padding: 32px 0;
+  color: var(--muted);
+  font-size: .9rem;
+}
+
+/* STEP 2 — HOVER, FOCUS, PRESS (R1) */
+.btn {
+  transition: transform var(--fast) var(--ease-out);
+}
+
+.btn:hover,
+.btn:focus-visible {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: scale(.97);
+}
+
+.card {
+  transition: transform var(--med) var(--ease-out);
+}
+
 .card:hover,
 .card:focus-within {
- transform: translateY(-4px);  
+  transform: translateY(-4px);
 }
+
 .card:active {
   transform: scale(.97);
 }
 
-/* ---------- STEP 3: load sequence with stagger (R2) -------------------------
-   1. .hero .w needs display: inline-block (inline spans ignore transform).
-   2. Write @keyframes rise-in with only a "from" block.
-   3. animation: rise-in var(--slow) var(--ease-out) both;
-      animation-delay: calc(var(--i) * 120ms + 100ms);
-   4. Bring .lede and .ctas in after the last word.                        */
-
-
-@keyframes rise-in { from { opacity: 0; transform: translateY(.6em); } }
-.hero .w {
-
-
-    display: inline-block;
-  animation: rise-in var(--slow) var(--ease-out) both;
-  animation-delay: calc(var(--i) * 120ms + 100ms);
+.pill {
+  transition: transform var(--fast) var(--ease-out);
 }
-/* ---------- STEP 4: bring the illustration to life (R3) ---------------------
-   Animate at least two parts. For each SVG part:
-     transform-box: fill-box;          (measure from the shape itself)
-     transform-origin: ...;            (where should it pivot?)
-   Ideas: .puff rises and fades (stagger with var(--d)), .awning sways,
-   .mascot bounces (squash and stretch!), .eye blinks, .sign swings.       */
 
-/* Sweet Treats Bakery waving flag */
+.pill:hover,
+.pill:focus-visible {
+  transform: translateY(-2px);
+}
+
+.pill:active {
+  transform: scale(.97);
+}
+
+/* STEP 3 — STAGGERED HEADLINE (R2) */
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(.6em);
+  }
+}
+
+.hero .w {
+  display: inline-block;
+  animation: rise-in var(--slow) var(--ease-out) both;
+  animation-delay: calc(var(--i) * 110ms + 100ms);
+}
+
+.hero .lede {
+  animation: rise-in 380ms var(--ease-out) both;
+  animation-delay: 810ms;
+}
+
+.hero .ctas {
+  animation: rise-in 340ms var(--ease-out) both;
+  animation-delay: 870ms;
+}
+
+/* STEP 4 — ANIMATED STOREFRONT (R3) */
+
+/* Pink waving flag */
 .flag {
   transform-box: fill-box;
   transform-origin: 0% 50%;
@@ -141,12 +395,13 @@ h1 { font-size: clamp(2.6rem, 8vw, 5rem); }
   from {
     transform: rotate(-5deg);
   }
+
   to {
     transform: rotate(5deg);
   }
 }
 
-/* Sweet Treats Bakery swinging OPEN sign */
+/* Swinging OPEN sign */
 .open-sign {
   transform-box: fill-box;
   transform-origin: 25% 0%;
@@ -157,19 +412,35 @@ h1 { font-size: clamp(2.6rem, 8vw, 5rem); }
   from {
     transform: rotate(-4deg);
   }
+
   to {
     transform: rotate(4deg);
   }
 }
-/* ---------- STEP 5: reveal on scroll (R4) -----------------------------------
-   .reveal         gets a transition on opacity and transform, delayed by --i.
-   .reveal.pending is the hidden starting state (opacity 0, moved down).
-   JavaScript adds .pending only to cards below the fold, then removes it. */
 
+/* Moving heart-shaped cupcake */
+.heart-cupcake {
+  transform-box: fill-box;
+  transform-origin: 50% 100%;
+  animation: heart-bounce 2s ease-in-out infinite alternate;
+}
+
+@keyframes heart-bounce {
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(-6px);
+  }
+}
+
+/* STEP 5 — MENU REVEAL (R4) */
 .reveal {
   transition:
     opacity var(--med) var(--ease-out),
     transform var(--med) var(--ease-out);
+
   transition-delay: calc(var(--i, 0) * 100ms);
 }
 
@@ -178,41 +449,62 @@ h1 { font-size: clamp(2.6rem, 8vw, 5rem); }
   transform: translateY(24px);
 }
 
-/* ---------- STEP 6: scroll story (R5) ---------------------------------------
-   OPTION A: style each state of the stage, for example
-     .stage[data-step="rise"] .dough { transform: scale(1.2, 1.8); }
-     .stage[data-step="bake"] .dough { fill: #c98a3c; }
-   Give .dough transform-box, a bottom-center origin, and a slow transition.
-   OPTION B: map --p to the art and text, for example
-     .zoom-art { transform: scale(calc(.5 + var(--p) * .8)); }             */
+/* STEP 6 — DOUGH SCROLL STORY (R5) */
 
-/* Step 6: Bakery story animation */
+/* Default dough */
 .stage .dough {
   transform-box: fill-box;
   transform-origin: 50% 100%;
-  transition: transform 900ms var(--ease-out),
-              fill 900ms ease;
+  transform: scale(1);
+  fill: #f4e3c3;
+
+  transition:
+    transform 900ms var(--ease-out),
+    fill 900ms ease;
 }
 
+/* Mix — normal */
+.stage[data-step="mix"] .dough {
+  transform: scale(1);
+  fill: #f4e3c3;
+}
+
+/* Shape — slightly flatter */
+.stage[data-step="shape"] .dough {
+  transform: scale(1.08, .92);
+  fill: #f4e3c3;
+}
+
+/* Rise — clearly bigger */
 .stage[data-step="rise"] .dough {
-  transform: scale(1.2, 1.8);
+  transform: scale(1.5, 1.8);
+  fill: #f4e3c3;
 }
 
+/* Bake — bigger and golden brown */
 .stage[data-step="bake"] .dough {
+  transform: scale(1.5, 1.8);
   fill: #c98a3c;
 }
 
-/* ---------- STEP 7: click feedback (R6) -------------------------------------
-   Most of this step is JavaScript. Style the toast's entrance here:
-   transition .toast's transform and opacity so it slides up when .show is added. */
-
+/* STEP 7 — ORDER CONFIRMATION (R6) */
 .toast {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  z-index: 20;
+  padding: 10px 18px;
+  border-radius: 999px;
+  color: white;
+  background: var(--ink);
+
   opacity: 0;
+  pointer-events: none;
   transform: translate(-50%, 20px);
+
   transition:
     opacity var(--med) var(--ease-out),
     transform var(--med) var(--ease-out);
-  pointer-events: none;
 }
 
 .toast.show {
@@ -220,21 +512,27 @@ h1 { font-size: clamp(2.6rem, 8vw, 5rem); }
   transform: translate(-50%, 0);
 }
 
-/* ---------- STEP 9: motion for everyone (R8) --------------------------------
-   1. html.paused should pause every animation (animation-play-state).
-   2. @media (prefers-reduced-motion: reduce) { ... } removes travel, loops,
-      and parallax. Content must still appear.                              */
-/* Pause all CSS animations */
+/* STEP 9 — PAUSE MOTION (R8) */
 html.paused *,
 html.paused *::before,
 html.paused *::after {
   animation-play-state: paused !important;
 }
+
+/* REDUCED MOTION — ACCESSIBILITY (R8) */
 @media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
   .hero .w,
-  .awning,
-  .sign {
+  .hero .lede,
+  .hero .ctas,
+  .flag,
+  .open-sign,
+  .heart-cupcake {
     animation: none !important;
+    opacity: 1 !important;
   }
 
   .reveal,
@@ -244,13 +542,41 @@ html.paused *::after {
     transition: none !important;
   }
 
-  .stage .dough {
+  .stage .dough,
+  .btn,
+  .card,
+  .pill,
+  .toast {
     transition: none !important;
+  }
+
+  .toast.show {
+    opacity: 1;
   }
 }
 
+/* RESPONSIVE LAYOUT */
+@media (max-width: 720px) {
+  .story {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
 
+  .stage {
+    top: 65px;
+    height: 35vh;
+    z-index: 2;
+  }
 
+  .step {
+    min-height: 40vh;
+  }
 
+  .nav ul {
+    display: none;
+  }
 
-
+  .pill {
+    margin-left: auto;
+  }
+}
